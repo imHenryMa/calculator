@@ -1,6 +1,10 @@
 :root{
-    --standard-spacing: 0.125rem;
-    --standard-button-size: 2rem;
+    --standard-spacing: 0.25rem;
+    --standard-button-size: 4rem;
+}
+
+.title{
+    font-size: var(--standard-button-size);
 }
 
 body {
@@ -30,6 +34,7 @@ body {
     width: calc(var(--standard-button-size)*5 + var(--standard-spacing)*4);
     margin: var(--standard-spacing);
     text-align: right;
+    font-size: calc(var(--standard-button-size)*.5);
 }
 
 .input-container{
@@ -56,6 +61,7 @@ body {
     width: var(--standard-button-size);
     aspect-ratio:1/1;
     margin: var(--standard-spacing);
+    font-size: calc(var(--standard-button-size)*.5);
 }
 
 .enter{

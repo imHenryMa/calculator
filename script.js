@@ -49,7 +49,16 @@ let keyPressed;
 window.addEventListener('keydown', keyHandlerDown);
 function keyHandlerDown(pressedKey){
 
-    pressedKey.preventDefault();
+    switch(pressedKey.keyCode){
+        case 191:
+        case 13:
+            console.log("Preventing enter or [/] button default behaviour");
+            pressedKey.preventDefault();
+            break;
+        default:
+            break;  
+    }
+        
     keyCode = pressedKey.keyCode;
 
     if(keyPressed == keyCode) return;
@@ -144,10 +153,15 @@ function keyHandlerUp(pressedKey){
 
 function setDisplay(n){
     display.value = n;
+    if (display.value.length > 10){
+        console.log("TO BIGG");
+        display.value = Number(display.value).toExponential(10);
+    }
 }
 
-function populateDisplay(n){
-    display.value = clearDisplayNextNum ? n : display.value+n;
+function populateDisplay(n, clearFlags = true){
+    if(clearFlags == false){clearDisplayNextNum=false;}
+    setDisplay(clearDisplayNextNum ? n : display.value+n);
     clearDisplayNextNum = false;
 }
 
@@ -167,7 +181,7 @@ function queueOperation(operation){
         let result = operationMap[storedOperation.operation](storedOperation.value, display.value);
 
         storedOperation["value"] = result;
-        display.value=result;
+        setDisplay(result);
         storedOperation["operation"] = operation;
         clearDisplayNextNum = true;
     }        
@@ -214,15 +228,15 @@ let functionMap = {
 
 function toggleNegative(){
     if(display.value[0] == '-'){
-        display.value = display.value.slice(1);
+        setDisplay(display.value.slice(1));
     } else {
-        display.value = '-' + display.value;
+        setDisplay('-' + display.value);
     }
 }
 
 function back(){
     let val = display.value;
-    display.value = val.slice(0,val.length-1);
+    setDisplay(val.slice(0,val.length-1));
 
     if(display.value ==''){
         clear();
@@ -233,8 +247,7 @@ function decimal(){
     let reg = /\.+/;
     console.log(display.value.search(reg));
     if(display.value.search(reg) == '-1'){
-        display.value = display.value + '.';
-        clearDisplayNextNum = false;
+        populateDisplay('.', false);
     } else {
         return;
     }
@@ -257,6 +270,6 @@ function enter(){
     {
         let result = operationMap[storedOperation.operation](storedOperation.value, display.value);
         clear();
-        display.value = result;
+        setDisplay(result);
     }       
 }
